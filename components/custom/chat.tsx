@@ -36,18 +36,11 @@ export function Chat({
     },
     onResponse: async (res) => {
       const r = await res.json();
-      // setMessages([...messages, ...r.messages]);
-      console.log("BMMM", r.messages);
-      setBackupMessage([...backupMessage, ...r.messages]);
+      setMessages((mess) => {
+        return mess.concat(r.messages);
+      });
     },
   });
-
-  const [backupMessage, setBackupMessage] = useState<Message[]>([]);
-
-  useEffect(() => {
-    setBackupMessage([...backupMessage, ...messages]);
-  }, [messages]);
-  console.log("BACKUP MESsAGE", backupMessage);
 
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
@@ -61,9 +54,9 @@ export function Chat({
           ref={messagesContainerRef}
           className="flex flex-col gap-4 h-full w-dvw items-center overflow-y-scroll"
         >
-          {backupMessage.length === 0 && <Overview />}
+          {messages.length === 0 && <Overview />}
 
-          {backupMessage.map((message) => (
+          {messages.map((message) => (
             <PreviewMessage
               key={message.id}
               chatId={id}
@@ -89,7 +82,7 @@ export function Chat({
             stop={stop}
             attachments={attachments}
             setAttachments={setAttachments}
-            messages={backupMessage}
+            messages={messages}
             append={append}
           />
         </form>
