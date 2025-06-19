@@ -2,7 +2,7 @@
 
 import { Attachment, Message } from "ai";
 import { useChat } from "ai/react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Message as PreviewMessage } from "@/components/custom/message";
 import { useScrollToBottom } from "@/components/custom/use-scroll-to-bottom";
@@ -17,16 +17,37 @@ export function Chat({
   id: string;
   initialMessages: Array<Message>;
 }) {
-  const { messages, handleSubmit, input, setInput, append, isLoading, stop } =
-    useChat({
-      id,
-      body: { id },
-      initialMessages,
-      maxSteps: 10,
-      onFinish: () => {
-        window.history.replaceState({}, "", `/chat/${id}`);
-      },
-    });
+  const {
+    messages,
+    handleSubmit,
+    input,
+    setInput,
+    append,
+    isLoading,
+    stop,
+    setMessages,
+  } = useChat({
+    id,
+    body: { id },
+    initialMessages,
+    maxSteps: 10,
+    onFinish: () => {
+      window.history.replaceState({}, "", `/chat/${id}`);
+    },
+    onResponse: async (res) => {
+      const r = await res.json();
+      // setMessages([...messages, ...r.messages]);
+      console.log("BMMM", r.messages);
+      setBackupMessage([...backupMessage, ...r.messages]);
+    },
+  });
+
+  const [backupMessage, setBackupMessage] = useState<Message[]>([]);
+
+  useEffect(() => {
+    setBackupMessage([...backupMessage, ...messages]);
+  }, [messages]);
+  console.log("BACKUP MESsAGE", backupMessage);
 
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
@@ -40,9 +61,9 @@ export function Chat({
           ref={messagesContainerRef}
           className="flex flex-col gap-4 h-full w-dvw items-center overflow-y-scroll"
         >
-          {messages.length === 0 && <Overview />}
+          {backupMessage.length === 0 && <Overview />}
 
-          {messages.map((message) => (
+          {backupMessage.map((message) => (
             <PreviewMessage
               key={message.id}
               chatId={id}
@@ -68,7 +89,7 @@ export function Chat({
             stop={stop}
             attachments={attachments}
             setAttachments={setAttachments}
-            messages={messages}
+            messages={backupMessage}
             append={append}
           />
         </form>
