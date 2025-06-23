@@ -25,22 +25,11 @@ export async function POST(req: Request) {
     }"\n\n\`\`\`json\n${JSON.stringify(data.result, null, 2)}\n\`\`\``;
   }
 
-  console.log("DATA: ", data);
-  let textResult;
-  if (Array.isArray(data?.result)) {
-    textResult = data?.result
-      ?.map((x: { [key: string]: string }) => Object.values(x))
-      .flat()
-      .join();
-  } else {
-    textResult = Object.values(data?.result).join();
-  }
-
   return NextResponse.json({
     messages: [
       {
         role: "assistant",
-        content: textResult,
+        content: data,
       },
     ],
   });
