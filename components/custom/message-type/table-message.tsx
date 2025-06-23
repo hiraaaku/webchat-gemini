@@ -22,15 +22,14 @@ export default function TableMessage({
         <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
           {data.map((item, idx) => (
             <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-700">
-              <td className="px-4 py-2 text-zinc-800 dark:text-zinc-200">
-                {item.Bulan}
-              </td>
-              <td className="px-4 py-2 text-zinc-800 dark:text-zinc-200">
-                {item.Tahun}
-              </td>
-              <td className="px-4 py-2 text-zinc-800 dark:text-zinc-200">
-                {item.Total_Penjualan}
-              </td>
+              {Object.values(item).map((value, idx) => (
+                <td
+                  key={idx}
+                  className="px-4 py-2 text-zinc-800 dark:text-zinc-200"
+                >
+                  {value}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

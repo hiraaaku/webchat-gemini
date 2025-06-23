@@ -74,19 +74,26 @@ export const Message = ({
           {typeof content !== "string" && content.type === "image" && (
             <Fragment>
               {content.image_url ? (
-                <ImageMessage
-                  src={content.image_url}
-                  fallbackSrc="/images/fallback.png"
-                  alt={
-                    typeof content.result === "string"
-                      ? content.result
-                      : "image"
-                  }
-                />
+                <Fragment>
+                  <ImageMessage
+                    src={content.image_url}
+                    fallbackSrc="/images/fallback.png"
+                    alt={
+                      typeof content.result === "string"
+                        ? content.result
+                        : "image"
+                    }
+                  />
+                  <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4 mt-2">
+                    <Markdown>
+                      {(content.result as string) || content.explanation}
+                    </Markdown>
+                  </div>
+                </Fragment>
               ) : (
                 <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
                   <Markdown>
-                    {typeof content.result || content.explanation}
+                    {(content.result as string) || content.explanation}
                   </Markdown>
                 </div>
               )}
@@ -96,11 +103,18 @@ export const Message = ({
           {typeof content !== "string" && content.type === "table" && (
             <Fragment>
               {content.result ? (
-                <TableMessage
-                  data={
-                    typeof content.result !== "string" ? content.result : []
-                  }
-                />
+                <Fragment>
+                  <TableMessage
+                    data={
+                      typeof content.result !== "string" ? content.result : []
+                    }
+                  />
+                  <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4 mt-2">
+                    <Markdown>
+                      {(content.result as string) || content.explanation}
+                    </Markdown>
+                  </div>
+                </Fragment>
               ) : (
                 <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
                   <Markdown>{content.result || content.explanation}</Markdown>
