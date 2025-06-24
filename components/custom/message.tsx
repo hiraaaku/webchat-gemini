@@ -67,9 +67,14 @@ export const Message = ({
           {typeof content !== "string" &&
             content.type === "text" &&
             typeof content.result === "string" && (
-              <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-                <Markdown>{content.result || content.explanation}</Markdown>
-              </div>
+              <Fragment>
+                <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
+                  <Markdown>{content.result || content.explanation}</Markdown>
+                </div>
+                <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4 mt-2">
+                  <Markdown>{content.explanation}</Markdown>
+                </div>
+              </Fragment>
             )}
           {typeof content !== "string" && content.type === "image" && (
             <Fragment>
@@ -85,16 +90,12 @@ export const Message = ({
                     }
                   />
                   <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4 mt-2">
-                    <Markdown>
-                      {(content.result as string) || content.explanation}
-                    </Markdown>
+                    <Markdown>{content.explanation}</Markdown>
                   </div>
                 </Fragment>
               ) : (
                 <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-                  <Markdown>
-                    {(content.result as string) || content.explanation}
-                  </Markdown>
+                  <Markdown>{content.explanation}</Markdown>
                 </div>
               )}
             </Fragment>
@@ -102,7 +103,7 @@ export const Message = ({
 
           {typeof content !== "string" && content.type === "table" && (
             <Fragment>
-              {content.result ? (
+              {content.result?.length ? (
                 <Fragment>
                   <TableMessage
                     data={
@@ -110,14 +111,12 @@ export const Message = ({
                     }
                   />
                   <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4 mt-2">
-                    <Markdown>
-                      {(content.result as string) || content.explanation}
-                    </Markdown>
+                    <Markdown>{content.explanation}</Markdown>
                   </div>
                 </Fragment>
               ) : (
                 <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-                  <Markdown>{content.result || content.explanation}</Markdown>
+                  <Markdown>{content.explanation}</Markdown>
                 </div>
               )}
             </Fragment>
